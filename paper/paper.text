@@ -1,0 +1,216 @@
+\documentclass[]{IEEEphot}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
+\jvol{xx}
+\jnum{xx}
+\jmonth{Junio}
+\pubyear{2026}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+\title{Sistema de apoyo a decisiones para movilidad inteligente basado en datos de videovigilancia urbana en el Callao}
+
+\author{H.~Herrera,  
+R.~Portilla\\ 
+}
+
+\affil{Universidad Nacional Mayor de San Marcos \& Facultad de Ingenieria de Sistemas e Informática\\ Lima, Perú}  
+\begin{comment}
+
+\doiinfo{DOI: 10.1109/JPHOT.2009.XXXXXXX\\
+1943-0655/\$25.00 \copyright 2009 IEEE}%
+\end{comment}
+
+\maketitle
+
+\markboth{TICs}{Trabajo parcial}
+\begin{comment}
+\begin{receivedinfo}%
+Manuscript received March 3, 2008; revised November 10, 2008. First published December 10, 2008. Current version published February 25, 2009. This research was sponsored by the National Science Foundation through the NSF ERC Center for Extreme Ultraviolet Science and Technology, NSF Award No. EEC-0310717. This paper was presented in part at the National Science Foundation.
+\end{receivedinfo}
+\end{comment}
+
+\begin{abstract}
+La movilidad inteligente constituye un componente fundamental de las ciudades inteligentes al permitir mejorar la gestión del tránsito mediante el aprovechamiento de datos urbanos. En el Callao, los registros de incidencias generados por la central de videovigilancia son utilizados principalmente con fines operativos, limitando su aprovechamiento para apoyar la toma de decisiones. Este trabajo propone un sistema de apoyo a decisiones basado en el análisis de datos abiertos de incidencias de tránsito y seguridad vial publicados por la Municipalidad Provincial del Callao. La investigación adopta la metodología Design Science Research para diseñar una arquitectura cloud orientada al procesamiento, análisis y generación de indicadores temporales, espaciales y operativos. La propuesta fue validada mediante una prueba de concepto utilizando 62\,916 registros correspondientes a abril de 2026, identificando patrones relevantes para la priorización de recursos y la planificación de acciones de movilidad urbana. Los resultados evidencian el potencial de reutilizar datos abiertos para fortalecer la gestión de ciudades inteligentes.
+\end{abstract}
+\begin{IEEEkeywords}
+Decision Support System, Smart Mobility, Smart Cities, Open Government Data, Cloud Computing, Peru.
+\end{IEEEkeywords}
+
+\section{Introducción}
+
+El crecimiento acelerado de las áreas urbanas ha generado importantes desafíos relacionados con la congestión vehicular, la seguridad vial y la gestión eficiente de los recursos públicos. En este contexto, el concepto de Ciudades Inteligentes (Smart Cities) promueve el uso de las tecnologías de la información y comunicación (TIC) para mejorar la prestación de servicios urbanos y fortalecer la toma de decisiones basada en datos. Dentro de este enfoque, la Movilidad Inteligente (Smart Mobility) constituye una de las dimensiones más relevantes, integrando tecnologías digitales, sistemas inteligentes de transporte y fuentes de datos urbanas para optimizar la movilidad y el transporte en las ciudades \cite{schreiner2016international,maldonado2020smart}. Asimismo, este enfoque contribuye al cumplimiento del Objetivo de Desarrollo Sostenible (ODS) 11 de las Naciones Unidas, particularmente a la meta 11.2 orientada a mejorar la seguridad vial y el acceso a sistemas de transporte seguros, accesibles y sostenibles.
+
+Diversos estudios han demostrado el potencial de los sistemas de monitoreo urbano para apoyar la gestión de la movilidad. En Bogotá, por ejemplo, se han utilizado registros de incidentes de tránsito obtenidos mediante plataformas digitales para mejorar la planificación y gestión del transporte urbano \cite{pedraza2025smart}. Asimismo, ciudades como Río de Janeiro y Anyang han desarrollado centros integrados de operaciones que combinan sistemas de videovigilancia, monitoreo del tráfico y análisis de información urbana para apoyar la movilidad y la seguridad ciudadana \cite{lee2016international,schreiner2016international}. Estas experiencias evidencian que los datos generados por la infraestructura urbana pueden convertirse en una fuente valiosa de conocimiento para la toma de decisiones.
+
+En el caso de la Provincia Constitucional del Callao, la Municipalidad Provincial dispone de una central de monitoreo de cámaras de videovigilancia que registra incidencias observadas en el espacio urbano. Sin embargo, estos registros son utilizados principalmente con fines operativos y su potencial para apoyar decisiones estratégicas relacionadas con la movilidad urbana aún es limitado. De acuerdo con los datos abiertos publicados por la municipalidad, las incidencias de tránsito y seguridad vial representan la categoría con mayor número de eventos registrados durante abril de 2026.
+
+Por ello, el presente estudio propone un sistema de apoyo a decisiones para movilidad inteligente basado en el análisis de incidencias de tránsito y seguridad vial registradas mediante videovigilancia urbana en el Callao. La investigación tiene como objetivo diseñar una propuesta sustentada en una arquitectura cloud y el aprovechamiento de datos abiertos para identificar patrones espaciales, temporales y operativos que apoyen la toma de decisiones en los niveles operativo, táctico y estratégico. De esta manera, el trabajo contribuye a demostrar el potencial de reutilizar registros históricos de videovigilancia como fuente de información para fortalecer la gestión de la movilidad urbana en el contexto de las ciudades inteligentes.
+
+\section{Estado del Arte}
+
+\subsection{Decision Support Systems para Smart Mobility}
+
+Los sistemas de apoyo a decisiones (Decision Support Systems, DSS) aplicados a movilidad inteligente han evolucionado desde herramientas centradas en reglas y evaluación multicriterio hacia plataformas que integran inteligencia artificial, análisis geoespacial y datos provenientes de diversas fuentes \cite{maldonado2020smart,de2021overview,salanova2022multilevel,shulajkovska2024artificial}. En el contexto de las Smart Cities, la movilidad inteligente constituye uno de los dominios más relevantes, ya que busca optimizar el tránsito urbano mediante el uso de tecnologías digitales, infraestructura conectada y análisis de datos \cite{mishra2025internet}. Un DSS no sustituye al decisor humano; organiza datos y lógica de decisión para evaluar alternativas y presentar información procesada.
+
+La literatura reciente evidencia dos orientaciones principales. La primera corresponde a DSS estratégicos o tácticos destinados a planificadores urbanos y responsables de política pública. Diversos estudios han desarrollado herramientas multinivel que integran información, modelamiento y evaluación para apoyar decisiones de movilidad en distintos niveles territoriales \cite{salanova2022multilevel}. Asimismo, se han propuesto DSS basados en inteligencia artificial para evaluar alternativas de movilidad sostenible mediante criterios múltiples y específicos de cada ciudad \cite{shulajkovska2024artificial}. Estas investigaciones muestran que el valor del DSS no reside únicamente en producir visualizaciones, sino en vincular datos, objetivos y lógica de evaluación.
+
+La segunda orientación comprende sistemas operativos que apoyan la gestión cotidiana del tránsito mediante información sobre flujos, demoras, congestión o incidentes. Aunque estos sistemas se aproximan a la operación diaria, suelen concentrarse en corredores, zonas piloto o infraestructuras específicas. Además, parte de la literatura desarrolla algoritmos de optimización o simulación sin integrar completamente la interacción con usuarios, la visualización y la trazabilidad de las recomendaciones \cite{paddeu2021collaborative}.
+
+Las experiencias internacionales también evidencian el impacto de la integración de información en la gestión urbana. En Río de Janeiro, la implementación de un centro integrado de operaciones permitió coordinar información proveniente de múltiples organismos para apoyar la gestión de incidentes y la movilidad urbana \cite{schreiner2016international}. De forma similar, el caso de Anyang, Corea del Sur, demuestra cómo la integración de plataformas inteligentes facilita la toma de decisiones y la administración de servicios urbanos, incluyendo la movilidad \cite{lee2016international}. Estos casos muestran que la disponibilidad de información integrada constituye un elemento fundamental para la operación de ciudades inteligentes.
+
+Los modelos GIS también cumplen un papel importante en la planificación de movilidad. Las herramientas geoespaciales permiten analizar accesibilidad, distribución territorial e impactos de diferentes alternativas; sin embargo, su desarrollo puede estar condicionado por la disponibilidad de datos y capacidades tecnológicas más que por las necesidades reales de los planificadores \cite{liu2023gis}. Este hallazgo respalda la necesidad de definir explícitamente usuarios, indicadores y niveles de decisión antes de seleccionar la tecnología.
+
+En conjunto, la evidencia confirma que un DSS para movilidad debe integrar datos confiables, indicadores interpretables, reglas de decisión y mecanismos de interacción con los usuarios \cite{shulajkovska2024artificial,salanova2022multilevel,liu2023gis}. Sin embargo, la mayoría de las propuestas revisadas depende de fuentes cerradas, simuladores especializados o infraestructuras urbanas con mayor madurez tecnológica. Persiste, por tanto, la necesidad de estudiar cómo construir un DSS reproducible cuando la fuente principal está formada por datos abiertos gubernamentales derivados de operaciones de videovigilancia.
+
+\subsection{Videovigilancia Urbana como Fuente de Información}
+
+La videovigilancia urbana constituye una fuente relevante para los sistemas inteligentes de transporte porque permite observar incidentes, congestión, densidad vehicular, accidentes y comportamientos anómalos. La investigación reciente se concentra principalmente en procesamiento automatizado de imágenes y video mediante detección de objetos, clasificación, seguimiento y aprendizaje profundo.
+
+Diversos estudios muestran avances significativos en algoritmos para la detección automática de incidentes utilizando sensores, cámaras y aprendizaje automático \cite{elsahly2022traffic,xia2022vehicle}. Sin embargo, estas investigaciones se centran principalmente en la precisión de detección, la reducción de falsas alarmas y el tiempo de respuesta, dejando en segundo plano el aprovechamiento de la información generada para apoyar decisiones institucionales.
+
+La revisión también permite distinguir entre monitoreo en tiempo real y explotación histórica. Mientras el primero busca detectar un evento inmediato, el segundo permite identificar recurrencias, horarios críticos, zonas de concentración y tendencias operativas. Existe evidencia limitada sobre el uso de registros históricos estructurados generados por centrales de videovigilancia como insumo para sistemas de apoyo a decisiones.
+
+En el caso del Callao, el conjunto de datos no contiene video crudo, sino registros estructurados de incidencias observadas mediante una central de monitoreo. En consecuencia, el aporte del presente estudio no se orienta a la visión computacional, sino a la reutilización de información operacional derivada de la videovigilancia para apoyar la toma de decisiones.
+
+\subsection{Open Government Data y Arquitecturas Cloud}
+
+Los datos abiertos gubernamentales (Open Government Data, OGD) constituyen un recurso importante para promover transparencia, innovación y toma de decisiones basada en evidencia. Su valor depende no solo de la publicación de los datos, sino también de su calidad, accesibilidad, reutilización y capacidades institucionales para su aprovechamiento \cite{wirtz2022opengov}. En el contexto de las Smart Cities, los OGD favorecen el desarrollo de soluciones reproducibles sin necesidad de desplegar nueva infraestructura de captura \cite{mishra2025internet}.
+
+Desde el punto de vista tecnológico, las arquitecturas cloud para analítica urbana convergen hacia diseños por capas que separan adquisición, almacenamiento, transformación, consulta y visualización. Arquitecturas como las propuestas por AWS utilizan servicios especializados para implementar flujos escalables de procesamiento batch y analítica sobre grandes volúmenes de datos \cite{aws2022analytics,aws2024batch}. No obstante, estas arquitecturas constituyen únicamente la infraestructura tecnológica; el sistema de apoyo a decisiones reside en la capa encargada de interpretar indicadores, aplicar criterios de decisión y presentar información útil para los diferentes niveles de gestión.
+
+\subsection{Brecha de Investigación}
+
+La revisión de la literatura evidencia avances importantes en sistemas de apoyo a decisiones, movilidad inteligente, videovigilancia, datos abiertos y arquitecturas cloud. Sin embargo, existe evidencia limitada de propuestas que integren registros históricos de incidencias provenientes de videovigilancia urbana publicados como datos abiertos, indicadores temporales, espaciales y operativos, y una arquitectura cloud escalable orientada a apoyar la toma de decisiones en movilidad inteligente. En este contexto, el presente trabajo propone un sistema de apoyo a decisiones basado en registros abiertos de incidencias observadas mediante videovigilancia en el Callao, integrando analítica de datos y una arquitectura cloud para apoyar la gestión de la movilidad urbana.
+
+
+
+\section{Metodología}
+
+\subsection{Diseño de la investigación}
+
+La investigación adopta la metodología Design Science Research (DSR), orientada al diseño y evaluación de artefactos tecnológicos para resolver problemas organizacionales \cite{hevner2004design,peffers2007dsrm}. En este trabajo, el problema identificado corresponde a la limitada explotación analítica de los registros históricos de incidencias provenientes de la central de videovigilancia del Callao. Como respuesta, se propone un sistema de apoyo a decisiones (DSS) para movilidad inteligente, sustentado en una arquitectura cloud y un flujo de procesamiento de datos orientado a transformar registros operativos en información útil para la toma de decisiones \cite{shulajkovska2024artificial,salanova2022multilevel}.
+
+La metodología comprende cuatro etapas: adquisición de datos, preparación y transformación, generación de indicadores y apoyo a decisiones. La propuesta fue validada mediante una prueba de concepto utilizando el conjunto de datos abierto de incidencias del Callao \cite{CallaoIncidencias2026}.
+
+\subsection{Arquitectura propuesta}
+
+La arquitectura propuesta en la Fig \ref{fig:architecture} sigue un enfoque por capas, separando la adquisición, almacenamiento, procesamiento, analítica y visualización de los datos. Como almacenamiento principal se plantea Amazon S3, organizado en zonas \textit{Raw}, \textit{Clean} y \textit{Curated}. AWS Glue se emplea para catalogar y transformar los datos, mientras que Amazon Athena permite realizar consultas analíticas sobre la información almacenada. Los indicadores generados pueden persistirse en Amazon RDS PostgreSQL para su utilización por el sistema de apoyo a decisiones y su visualización mediante Amazon QuickSight, siguiendo las recomendaciones de las arquitecturas modernas de analítica de datos propuestas por AWS \cite{aws2023analyticslens,awsModernDataArchitecture,awsGlueCatalog,awsAthenaGlue}.
+
+La comunicación entre los componentes se realiza mediante la infraestructura de red y los servicios administrados de AWS, permitiendo el intercambio seguro de información entre las capas de adquisición, procesamiento, almacenamiento y visualización.
+
+El motor DSS constituye una capa lógica independiente encargada de interpretar los indicadores y aplicar reglas de priorización para apoyar a usuarios operativos, tácticos y estratégicos, en concordancia con los principios de los sistemas de apoyo a decisiones descritos en la literatura \cite{shulajkovska2024artificial,salanova2022multilevel,paddeu2021collaborative}.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{arquitectura.eps}
+\caption{Arquitectura propuesta del sistema de apoyo a decisiones para movilidad inteligente.}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Flujo de procesamiento}
+
+El flujo propuesto inicia con la adquisición del archivo CSV publicado por la Municipalidad Provincial del Callao \cite{CallaoIncidencias2026}. Posteriormente, los datos son almacenados en la zona \textit{Raw}, donde se preserva la información original. En la etapa de preparación se realizan procesos de validación, limpieza, normalización y generación de variables derivadas, obteniendo un conjunto de datos curado apto para el análisis.
+
+Sobre estos datos se calculan indicadores temporales, espaciales y operativos que posteriormente son interpretados por el motor DSS para generar información orientada al apoyo de decisiones. Finalmente, los resultados son presentados mediante tableros y mapas que facilitan el análisis de la movilidad urbana, siguiendo una arquitectura de procesamiento desacoplada y escalable \cite{aws2023analyticslens,awsModernDataArchitecture}.
+
+\subsection{Indicadores del DSS}
+
+Los principales indicadores considerados por la propuesta incluyen el número total de incidencias, distribución por hora, distribución por zona operativa, distribución por base de monitoreo, concentración espacial de eventos y tiempo de atención cuando la calidad de los datos lo permite.
+
+Estos indicadores se organizan de acuerdo con el nivel de decisión al que apoyan: operativo, mediante el monitoreo de incidencias y carga de trabajo; táctico, mediante la identificación de patrones temporales y espaciales; y estratégico, mediante la priorización de intervenciones y planificación de recursos, siguiendo el enfoque multinivel utilizado en investigaciones recientes sobre sistemas de apoyo a decisiones para movilidad inteligente \cite{salanova2022multilevel,shulajkovska2024artificial}.
+
+
+
+\section{Caso de Estudio}
+
+
+
+El caso de estudio corresponde a la Provincia Constitucional del Callao, una de las principales zonas logísticas y urbanas del Perú debido a la presencia del Puerto del Callao, el Aeropuerto Internacional Jorge Chávez y una red vial que conecta el transporte de pasajeros y mercancías con Lima Metropolitana. Estas características generan una alta demanda sobre la infraestructura vial y hacen necesario disponer de herramientas que permitan analizar patrones de movilidad y apoyar la toma de decisiones.
+
+
+
+El desarrollo de soluciones basadas en datos se encuentra respaldado por el marco de Gobierno Digital del Estado Peruano, establecido mediante el Decreto Legislativo N.° 1412 y su reglamento, los cuales promueven el uso de tecnologías digitales, interoperabilidad y gestión de datos en las entidades públicas \cite{pcm2018gobiernodigital,pcm2021reglamentogd}. Asimismo, la Política Nacional de Transformación Digital al 2030 reconoce el aprovechamiento de los datos como un elemento estratégico para mejorar la prestación de servicios públicos y fortalecer la toma de decisiones \cite{pcm2023transformaciondigital}.
+
+La investigación utiliza el conjunto de datos abierto \textit{Registro de incidencias observadas mediante la central de monitoreo de cámaras de videovigilancia de la Municipalidad Provincial del Callao}, publicado por la Plataforma Nacional de Datos Abiertos bajo responsabilidad de la Municipalidad Provincial del Callao \cite{CallaoIncidencias2026}. Para el análisis se seleccionaron los registros correspondientes a la categoría \textit{Tránsito y Seguridad Vial} del periodo abril de 2026, obteniéndose un total de 62\,916 incidencias válidas después del proceso de depuración.
+
+Los registros contienen información temporal, espacial y operativa, incluyendo fecha, hora, ubicación geográfica, zona, base de monitoreo y tipo de incidencia. Estas variables permiten identificar patrones de movilidad, zonas críticas y horarios de mayor ocurrencia de eventos, constituyendo una fuente adecuada para la construcción de indicadores que apoyen decisiones operativas, tácticas y estratégicas.
+
+
+El estudio emplea registros estructurados derivados de la operación de la central de videovigilancia y no procesa imágenes o video en tiempo real. En consecuencia, la contribución del trabajo se centra en demostrar cómo los datos abiertos generados por una operación municipal pueden transformarse en información útil para un sistema de apoyo a decisiones de movilidad inteligente. El uso de un conjunto de datos oficial también favorece la reproducibilidad de la investigación y su posible aplicación en otras entidades públicas que publiquen información con características similares.
+
+Finalmente, el caso de estudio presenta algunas limitaciones. Desde el punto de vista de infraestructura, el análisis depende de la cobertura de la central de videovigilancia y de la disponibilidad de los registros publicados por la Municipalidad Provincial del Callao. En el ámbito regulatorio, una eventual integración con otras entidades públicas deberá cumplir las disposiciones del marco de Gobierno Digital e interoperabilidad del Estado Peruano \cite{pcm2018gobiernodigital,pcm2021reglamentogd,pcm2011pide}. Asimismo, la propuesta utiliza datos históricos publicados como datos abiertos, por lo que la incorporación de información en tiempo real requerirá mecanismos adicionales de integración, conectividad y disponibilidad de infraestructura tecnológica.
+
+\section{Resultados}
+
+Los resultados obtenidos evidencian que el análisis de incidencias registradas mediante la central de monitoreo permite identificar patrones temporales, espaciales y operativos relevantes para la gestión de la movilidad urbana. El conjunto de datos analizado estuvo conformado por 62,916 incidencias de tránsito y seguridad vial registradas durante abril de 2026. Asimismo, el proceso de preprocesamiento permitió validar el 99.93\% de las coordenadas geográficas y el 99.93\% de los tiempos de atención, lo que evidencia una adecuada calidad de los datos para su utilización en procesos de apoyo a decisiones \cite{CallaoIncidencias2026}.
+
+\subsection{Análisis temporal}
+
+El análisis temporal mostró una distribución no uniforme de las incidencias a lo largo del día. La mayor concentración de eventos se registró a las 18:00 horas con 4,229 incidencias (6.72\%), seguida de las 19:00 y 20:00 horas con 4,080 (6.48\%) y 3,821 (6.07\%) registros, respectivamente. Estos resultados evidencian un incremento de las incidencias durante el periodo de mayor circulación vehicular, constituyendo un indicador relevante para la planificación de recursos y la priorización de acciones de monitoreo.
+
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{figura2a.eps}
+\caption{Arquitectura propuesta del sistema de apoyo a decisiones para movilidad inteligente.}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Análisis espacial}
+
+En la dimensión espacial se observó una concentración importante de incidencias en la Zona 3 / Sector 11 – Cía. Oquendo, con 20,291 registros (32.25\%), seguida por la Zona 2 / Sector 7 – Playa Rímac con 11,477 incidencias (18.24\%). En conjunto, estas zonas concentran una proporción significativa de los eventos registrados, permitiendo identificar áreas prioritarias para la gestión de la movilidad y la asignación de recursos municipales.
+
+\subsection{Análisis operativo}
+
+Desde la perspectiva operativa, la Base Descentralizada C–Oquendo registró el mayor volumen de incidencias con 21,506 casos (34.18\%), seguida por la Base C–Quilca con 16,184 registros (25.72\%). Asimismo, el tiempo promedio de atención de los incidentes fue de 14.51 minutos, con una mediana de 14.52 minutos, lo que evidencia una baja dispersión en los tiempos de respuesta una vez eliminados los registros atípicos. Estos indicadores constituyen la base para el sistema de apoyo a decisiones propuesto, al permitir identificar zonas críticas, horarios de mayor demanda y la distribución operativa de los recursos destinados a la gestión de la movilidad urbana.
+
+\subsection{Validación de la propuesta}
+
+La validación de la propuesta se realizó mediante una prueba de concepto utilizando el conjunto de datos abierto de incidencias de la Municipalidad Provincial del Callao. El flujo de procesamiento permitió adquirir, depurar y transformar la información, generando indicadores temporales, espaciales y operativos que constituyen la base para el sistema de apoyo a decisiones.
+
+Los resultados obtenidos demuestran que la arquitectura propuesta permite transformar registros históricos de videovigilancia en información útil para apoyar la toma de decisiones. En particular, fue posible identificar horarios de mayor incidencia, zonas con mayor concentración de eventos y la distribución de la carga operativa entre las bases de monitoreo. Estos indicadores responden directamente al problema planteado, al proporcionar evidencia objetiva para la priorización de recursos y la planificación de acciones relacionadas con la movilidad urbana.
+
+Desde la perspectiva de Design Science Research, la validez de la propuesta se sustenta en que el artefacto diseñado integra de manera coherente la adquisición, procesamiento, almacenamiento y análisis de datos, generando información consistente con los objetivos del sistema de apoyo a decisiones \cite{hevner2004design,peffers2007dsrm}. Asimismo, la utilización de un conjunto de datos oficial y reproducible permite verificar la factibilidad técnica de la propuesta y facilita su adaptación a otras entidades públicas que dispongan de registros con características similares.
+
+\section{Discusión}
+
+Los resultados obtenidos demuestran que el análisis de registros históricos provenientes de la central de monitoreo permite identificar patrones relevantes para la gestión de la movilidad urbana. En particular, la concentración de incidencias durante las horas de mayor demanda vehicular y en zonas específicas del Callao evidencia que los datos de videovigilancia pueden utilizarse no solo para la atención operativa de eventos, sino también como insumo para apoyar la planificación y asignación de recursos.
+
+Los patrones temporales y espaciales identificados en esta investigación son consistentes con estudios que utilizan el análisis de incidentes viales para identificar zonas críticas y periodos de mayor ocurrencia de eventos con el fin de apoyar la gestión del tránsito urbano \cite{pedraza2025smart}. De manera similar, la propuesta presentada en este trabajo transforma registros históricos en indicadores que facilitan la toma de decisiones para la movilidad.
+
+Asimismo, la propuesta guarda relación con experiencias internacionales en las que la infraestructura de monitoreo urbano y los sistemas de videovigilancia son utilizados para integrar información que fortalece la gestión de la movilidad y otros servicios urbanos \cite{schreiner2016international,lee2016international}. Sin embargo, a diferencia de dichas iniciativas, que requieren importantes inversiones en infraestructura tecnológica, el presente estudio demuestra que es posible generar información de valor utilizando datos abiertos provenientes de una central de monitoreo ya existente.
+
+La propuesta también se alinea con investigaciones que emplean sistemas de apoyo a decisiones para fortalecer la gestión de la movilidad urbana \cite{shulajkovska2024artificial}. No obstante, mientras dichos trabajos incorporan técnicas de inteligencia artificial para evaluar escenarios de movilidad, esta investigación se centra en el análisis descriptivo de datos históricos como base para el diseño del sistema propuesto.
+
+Entre las principales limitaciones del estudio se encuentran el análisis de un único mes de información y la utilización de registros provenientes exclusivamente de la central de videovigilancia. Como trabajo futuro, la integración de sensores de tránsito, dispositivos IoT y fuentes de información en tiempo real permitiría ampliar las capacidades del sistema de apoyo a decisiones, en concordancia con las tendencias actuales de movilidad inteligente y ciudades inteligentes \cite{mishra2025internet,de2021overview,maldonado2020smart}.
+
+\section{Conclusiones}
+
+En este trabajo se presentó una propuesta de sistema de apoyo a decisiones para movilidad inteligente basada en el análisis de datos provenientes de la central de videovigilancia de la Municipalidad Provincial del Callao. El análisis de 62,916 incidencias permitió identificar patrones temporales, espaciales y operativos que constituyen información relevante para apoyar la planificación y priorización de acciones orientadas a la gestión de la movilidad urbana.
+
+Los resultados obtenidos evidencian que los registros históricos de videovigilancia pueden transformarse en indicadores útiles para la toma de decisiones, permitiendo identificar horarios de mayor incidencia, zonas críticas y la distribución de la carga operativa de las bases descentralizadas. En este sentido, la propuesta demuestra el potencial de aprovechar datos abiertos ya disponibles para fortalecer la gestión de la movilidad sin requerir infraestructura tecnológica adicional.
+
+Como trabajo futuro, se propone ampliar el sistema mediante la incorporación de datos en tiempo real provenientes de sensores de tránsito, dispositivos IoT y otras fuentes de información, así como la integración de técnicas de analítica predictiva que permitan anticipar patrones de movilidad y fortalecer el proceso de toma de decisiones en ciudades inteligentes.
+
+%% \ackrule
+
+\bibliographystyle{IEEEtran}
+\bibliography{thesis}
+
+%\section*{Biographies}
+
+%\textbf{P. W. Wachulak} received the degree${\ldots}$ \\[6pt]
+%\textbf{M. C. Marconi} received the degree${\ldots}$ \\[6pt]
+%\textbf{R. A. Bartels} received the degree${\ldots}$ \\[6pt]
+%\textbf{C. S. Menoni} received the degree${\ldots}$ \\[6pt]
+%\textbf{J. J. Rocca} received the degree${\ldots}$
+
+
+
+\end{document}
