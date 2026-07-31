@@ -152,19 +152,41 @@ Los resultados obtenidos evidencian que el análisis de incidencias registradas 
 
 \subsection{Análisis temporal}
 
-El análisis temporal mostró una distribución no uniforme de las incidencias a lo largo del día. La mayor concentración de eventos se registró a las 18:00 horas con 4,229 incidencias (6.72\%), seguida de las 19:00 y 20:00 horas con 4,080 (6.48\%) y 3,821 (6.07\%) registros, respectivamente. Estos resultados evidencian un incremento de las incidencias durante el periodo de mayor circulación vehicular, constituyendo un indicador relevante para la planificación de recursos y la priorización de acciones de monitoreo.
+El análisis temporal mostró una distribución no uniforme de las incidencias a lo largo del día. La mayor concentración de eventos se registró a las 18:00 horas con 4,229 incidencias (6.72\%), seguida de las 19:00 y 20:00 horas con 4,080 (6.48\%) y 3,821 (6.07\%) registros, respectivamente. Estos resultados evidencian un incremento de las incidencias durante el periodo de mayor circulación vehicular, constituyendo un indicador relevante para la planificación de recursos y la priorización de acciones de monitoreo como se observa en la Fig. \ref{fig:temporal1} y Fig. \ref{fig:temporal2}.
 
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{figura2a.eps}
-\caption{Arquitectura propuesta del sistema de apoyo a decisiones para movilidad inteligente.}
-\label{fig:architecture}
+\caption{Análisis temporal por zona.}
+\label{fig:temporal1}
 \end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{figura2b.eps}
+\caption{Análisis temporal por base.}
+\label{fig:temporal2}
+\end{figure}
+
 
 \subsection{Análisis espacial}
 
-En la dimensión espacial se observó una concentración importante de incidencias en la Zona 3 / Sector 11 – Cía. Oquendo, con 20,291 registros (32.25\%), seguida por la Zona 2 / Sector 7 – Playa Rímac con 11,477 incidencias (18.24\%). En conjunto, estas zonas concentran una proporción significativa de los eventos registrados, permitiendo identificar áreas prioritarias para la gestión de la movilidad y la asignación de recursos municipales.
+En la dimensión espacial se observó una concentración importante de incidencias en la Zona 3 / Sector 11 – Cía. Oquendo, con 20,291 registros (32.25\%), seguida por la Zona 2 / Sector 7 – Playa Rímac con 11,477 incidencias (18.24\%). En conjunto, estas zonas concentran una proporción significativa de los eventos registrados, permitiendo identificar áreas prioritarias para la gestión de la movilidad y la asignación de recursos municipales como se observa en la Fig. \ref{fig:espacial1} y la Fig. \ref{fig:espacial2}.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{figura3a.eps}
+\caption{Análisis espacial por zona.}
+\label{fig:espacial1}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{figura3b.eps}
+\caption{Análisis espacial por base.}
+\label{fig:espacial2}
+\end{figure}
 
 \subsection{Análisis operativo}
 
@@ -192,11 +214,11 @@ Entre las principales limitaciones del estudio se encuentran el análisis de un 
 
 \section{Conclusiones}
 
-En este trabajo se presentó una propuesta de sistema de apoyo a decisiones para movilidad inteligente basada en el análisis de datos provenientes de la central de videovigilancia de la Municipalidad Provincial del Callao. El análisis de 62,916 incidencias permitió identificar patrones temporales, espaciales y operativos que constituyen información relevante para apoyar la planificación y priorización de acciones orientadas a la gestión de la movilidad urbana.
+En este trabajo se presentó una propuesta de sistema de apoyo a decisiones para movilidad inteligente basada en el análisis de datos abiertos provenientes de la central de videovigilancia de la Municipalidad Provincial del Callao. La aplicación de la propuesta sobre un conjunto de 62\,916 incidencias permitió identificar patrones temporales, espaciales y operativos que constituyen información relevante para apoyar la planificación y priorización de acciones relacionadas con la movilidad urbana.
 
-Los resultados obtenidos evidencian que los registros históricos de videovigilancia pueden transformarse en indicadores útiles para la toma de decisiones, permitiendo identificar horarios de mayor incidencia, zonas críticas y la distribución de la carga operativa de las bases descentralizadas. En este sentido, la propuesta demuestra el potencial de aprovechar datos abiertos ya disponibles para fortalecer la gestión de la movilidad sin requerir infraestructura tecnológica adicional.
+La prueba de concepto mostró la factibilidad de integrar una arquitectura cloud con registros históricos de incidencias para generar indicadores orientados a los niveles operativo, táctico y estratégico. Asimismo, el estudio evidencia el potencial de reutilizar datos abiertos gubernamentales como insumo para sistemas de apoyo a decisiones, favoreciendo el aprovechamiento de información ya disponible sin requerir nuevos mecanismos de captura de datos.
 
-Como trabajo futuro, se propone ampliar el sistema mediante la incorporación de datos en tiempo real provenientes de sensores de tránsito, dispositivos IoT y otras fuentes de información, así como la integración de técnicas de analítica predictiva que permitan anticipar patrones de movilidad y fortalecer el proceso de toma de decisiones en ciudades inteligentes.
+Como trabajo futuro, se plantea ampliar la propuesta mediante la incorporación de información en tiempo real proveniente de sensores de tránsito, dispositivos IoT y otras fuentes urbanas, así como evaluar la integración de modelos predictivos que permitan anticipar patrones de movilidad y fortalecer el proceso de toma de decisiones en el contexto de las ciudades inteligentes.
 
 %% \ackrule
 
