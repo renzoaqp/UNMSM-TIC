@@ -1,0 +1,41 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_LEFT_RIGHT()
+
+title Arquitectura propuesta del DSS para movilidad inteligente (C4 - Contenedores)
+
+Person(operativo, "Usuario operativo", "Centro de monitoreo, seguridad ciudadana y Policía Nacional")
+Person(tactico, "Usuario táctico", "Municipalidad y gobierno regional")
+Person(estrategico, "Usuario estratégico", "Entidades nacionales y responsables de política pública")
+
+System_Ext(pnda, "Plataforma Nacional de Datos Abiertos", "Publica archivos CSV de incidencias")
+System_Ext(sistemas, "Sistemas institucionales", "APIs y eventos futuros de incidencias")
+
+System_Boundary(dss, "DSS de movilidad inteligente sobre AWS") {
+  Container(api, "Capa de adquisición", "Amazon API Gateway, EventBridge y AWS Lambda", "Recibe cargas batch y eventos near real-time; valida y registra metadatos")
+  ContainerDb(raw, "Data Lake - Raw", "Amazon S3", "Conserva los datos originales sin modificación")
+  Container(etl, "Preparación y catálogo", "AWS Glue Crawler, Glue Data Catalog y Glue ETL", "Descubre esquemas, limpia, normaliza y transforma datos")
+  ContainerDb(clean, "Data Lake - Clean/Curated", "Amazon S3", "Almacena datos validados y conjuntos analíticos enriquecidos")
+  Container(analytics, "Capa analítica", "Amazon Athena", "Ejecuta consultas SQL y genera agregaciones temporales, espaciales y operativas")
+  ContainerDb(rds, "Repositorio relacional", "Amazon RDS for PostgreSQL", "Guarda indicadores, reglas, resultados y trazabilidad de decisiones")
+  Container(dssengine, "Motor DSS", "Servicio de reglas", "Interpreta indicadores, aplica criterios y prioriza intervenciones")
+  Container(dashboard, "Visualización", "Amazon QuickSight", "Presenta mapas, tendencias, indicadores y resúmenes por nivel de decisión")
+}
+
+Rel(pnda, api, "Entrega archivos CSV", "HTTPS / carga batch")
+Rel(sistemas, api, "Envía eventos futuros", "HTTPS / JSON")
+Rel(api, raw, "Persiste datos y metadatos")
+Rel(raw, etl, "Proporciona datos originales")
+Rel(etl, clean, "Escribe datos limpios y curados")
+Rel(clean, analytics, "Consulta datos curados")
+Rel(analytics, rds, "Almacena agregaciones e indicadores")
+Rel(rds, dssengine, "Proporciona indicadores y reglas")
+Rel(dssengine, rds, "Registra prioridades y resultados")
+Rel(rds, dashboard, "Expone indicadores y resultados")
+Rel(operativo, dashboard, "Consulta información operativa")
+Rel(tactico, dashboard, "Consulta patrones y prioridades tácticas")
+Rel(estrategico, dashboard, "Consulta tendencias y resultados estratégicos")
+
+SHOW_LEGEND()
+@enduml
